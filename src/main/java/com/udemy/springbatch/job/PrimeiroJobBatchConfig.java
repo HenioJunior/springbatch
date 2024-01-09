@@ -1,4 +1,4 @@
-package com.udemy.springbatch;
+package com.udemy.springbatch.job;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -19,40 +19,20 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableBatchProcessing
 @Configuration
-public class BatchConfig {
+public class PrimeiroJobBatchConfig {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Job imprimeOlaJob() {
+    public Job imprimeOlaJob(Step imprimeOlaStep) {
         return jobBuilderFactory
                 .get("imprimeOlaJob")
-                .start(imprimeOlaStep())
+                .start(imprimeOlaStep)
                 .incrementer(new RunIdIncrementer())
                 .build();
     }
 
-    @Bean
-    public Step imprimeOlaStep() {
-        return stepBuilderFactory
-                .get("imprimeOlaStep")
-                .tasklet(imprimeOlaTasklet(null))
-                .build();
-    }
 
-    @Bean
-    @StepScope
-    public Tasklet imprimeOlaTasklet(@Value("#{jobParameters['nome']}") String nome) {
-        return new Tasklet() {
-            @Override
-            public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                System.out.println(String.format("Olá, %s!", nome));
-                return RepeatStatus.FINISHED;
-            }
-        };
-    }
 }
