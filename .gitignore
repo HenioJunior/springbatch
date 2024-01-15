@@ -24,6 +24,6 @@ hs_err_pid*
 replay_pid*
 
 #Mac
-.DS_Store
+*.DS_Store
 
-.idea
+*.idea
